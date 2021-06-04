@@ -2,7 +2,7 @@
 
 The adoption of cloud computing has quickly become a key driving force for businesses today, as applications are moved out of on-premise data centres in a bid to innovate, cut costs and increase agility.
 
-AWS is the premier **Infrastructure-as-a-service (IaaS)** provider and leads the market for cloud computing.
+AWS is the premier **Infrastructure-as-a-service (IaaS)** provider and leads the market for cloud computing. As of Q4 2019 it has captured 33% of the market. 
 
 <img src="https://i.imgur.com/7LuDq6U.png">
 
@@ -57,3 +57,9 @@ Amazon DynamoDB is a key-value and document database that delivers single-digit 
 #### Amazon CloudWatch
 
 CloudWatch collects monitoring and operational data in the form of logs, metrics, and events, providing you with a unified view of AWS resources, applications, and services that run on AWS and on-premises servers. 
+
+### AWS Certification
+
+One way to establish yourself as someone specializing in AWS is to obtain one or more of their certifications
+
+<img src="https://i.imgur.com/S8WpNAY.png">
