@@ -107,11 +107,11 @@ Once you have copied that number and/or written it down click on the **Console l
 
 Since we want to sign in as the new **IAM user** we just created click on that box.  
 
-<img src="https://i.imgur.com/D3EkkBN.png">
+<img src="https://i.imgur.com/D3EkkBN.png" width=700>
 
 Enter the **12 digit account number** and click next.  Here you will be be able to login as the **IAM user**.  Login with the account name and the password provided in the csv file. 
 
-<img src="https://i.imgur.com/tX8xBql.png">
+<img src="https://i.imgur.com/tX8xBql.png" width=700>
 
 
 
