@@ -103,7 +103,7 @@ One piece of info we will need for the user to login in the **12 digit** account
 
 Once you have copied that number and/or written it down click on the **Console login link** in the csv file and this will take you to the login page. 
 
-<img src="https://i.imgur.com/FuZuspS.png">
+<img src="https://i.imgur.com/FuZuspS.png" width=500>
 
 Since we want to sign in as the new **IAM user** we just created click on that box.  
 
