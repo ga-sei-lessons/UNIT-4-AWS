@@ -4,10 +4,10 @@
 
 
 
-This lecture will focus on creating new and update existing items in DynamoDB via the POST/PUT routes.  We will focus on the following:
+This lecture will focus on posting new items and update existing items in DynamoDB via the **POST/PUT** routes.  We will focus on the following:
 
-- updating the project-create Lambda function to create new items in DynamoDB
-- updating the project-show Lambda function to update existing items in DynamoDB
+- updating the **project-create** Lambda function to create new items in DynamoDB
+- updating the **project-show** Lambda function to update existing items in DynamoDB
 
 ### POST Route
 
@@ -21,7 +21,14 @@ const dynamodb = new AWS.DynamoDB({region: 'us-east-1', apiVersion: '2012-08-10'
 
 #### The putItem Method
 
-The method we will use to create new items is **putItem**. If we do a quick search for **putItem** in the [AWS Docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html) we should see the following:
+The method we will use to create new items is **putItem**.
+
+HTTP | Resource  | CRUD Operation | Lambda | DynamoDB | Has Data
+-----------|------------------|------------------|:---:|:---:|:---:
+PUT     | /projects/:id      | Update specified _project_  | projects-update | updateItem | Yes
+
+
+ If we do a quick search for **putItem** in the [AWS Docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html) we should see the following:
 
 <img src="https://i.imgur.com/nWqd2by.png">
 
@@ -33,7 +40,7 @@ We can see that the **putItem** method takes in a **params** object and a **call
 
 Let's first start with creating the params object.  Since DynamoDB doesn't take on the responsibility of managing primary keys we will need to make sure every entry is unique.  
 
-The data structure is very similar to what was returned via **scan** and **getItem** and this is the same pattern we will use to create an item. 
+The data structure is very similar to what was returned via **scan** and **getItem** and this will be the same pattern needed to create an item. 
 
 For this we will use a combo of  `project_${Math.random()}`.  
 
@@ -60,6 +67,18 @@ const params = {
 Let's pass the param to **dynamodb.putItem** and set it up for **await** and **.promise()**.
 
 ```js
+ try {
+    const data = await dynamodb.putItem(params).promise()
+    console.log('data', data)
+
+    response.body = data
+
+} catch(err) {
+    response.body = err
+}
+```
+
+<!-- ```js
 await dynamodb.putItem(params, function(err, data) {
     console.log('err', err, 'data', data)
     if (err) {
@@ -69,7 +88,7 @@ await dynamodb.putItem(params, function(err, data) {
         response.body = data
     }
 }).promise()
-```
+``` -->
 
 <details><summary>Solution Code</summary>
 
@@ -102,24 +121,23 @@ exports.handler = async (event) => {
         TableName: "projects"
     };
     
-    await dynamodb.putItem(params, function(err, data) {
-        console.log('err', err, 'data', data)
-        if (err) {
-            console.log('err', err);
-        } else {
-            console.log('data', data);
-            response.body = params
-        }
-    }).promise()
+    try {
+        const data = await dynamodb.putItem(params).promise()
+        console.log('data', data)
+        
+        response.body = params
+        
+    } catch(err) {
+        response.body = err
+    }
 
-    
     return response
 };
 ```
 
 </details>
 
-If we test this we will find that **putItem** doesn't return the newly created item so we can pass back the **params** object since it contains all the values that now exist in the DB. 
+If we test this we will find that **putItem** doesn't return the newly created item so we opt to pass back the **params** object since it contains all the values that now exist in the DB. 
 
 ```js
 response.body = params
@@ -144,7 +162,11 @@ Once we run the test we should receive the following error message.
 This is the same error we received with **scan** and **getItem** which means we need to assign the Lambda role permissions to DynamoDB via **IAM**.  
 
 
-Take a moment to open **IAM** and find the **projects-create-xxx** role. Click on **Attach Policies** and do a search for *dynamo**.  The policy we are going to attach is **AmazonDynamoDBFullAccess** as this role will need to create items in the DB. 
+Take a moment to open **IAM** and find the **projects-create-xxx** role. It should look something like the below: 
+
+<img src="https://i.imgur.com/5xN96Fp.png">
+
+Click on **Attach Policies** and do a search for *dynamo**.  The policy we are going to attach is **AmazonDynamoDBFullAccess** as this role will need to create items in the DB. 
 
 <img src="https://i.imgur.com/Wpdigql.png">
 
@@ -155,13 +177,14 @@ Attach the policy and let's run the Lambda test again. We should see the followi
 
 Also confirm that the item has been created in our DynamoDB project table. 
 
+**REPLACE THIS IMAGE**
 <img src="https://i.imgur.com/tzky8Ne.png">
 
 
 
-#### Testing Via The POST Route
+#### Testing The POST Route
 
-Let's also take a moment to test the route via the **POST** route. Pass it the same object as before and confirm that the same data has been returned, with only the projectId being different. 
+Let's also take a moment to test via the **POST** route in the API Gateway.  Pass it the same object as before and confirm that the same data has been returned, with only the projectId being different. 
 
 <img src="https://i.imgur.com/H963ZLv.png">
 
@@ -199,9 +222,11 @@ Here is how we will use **$input.json()** to format the data.
 }
 ```
 
-Let's make sure to give it one final test via the POST route and confirm the data is formatted as expected. 
+Let's make sure to give it one final test via the **POST** route and confirm the data is formatted as expected. 
 
 <img src="https://i.imgur.com/VWPHBgL.png">
+
+#### Redeploy And Test The POST Route Using Postman
 
 Once that has been confirmed re-deploy the API now test it via Postman.  If successful we should see the following:
 
@@ -215,13 +240,11 @@ Once that has been confirmed re-deploy the API now test it via Postman.  If succ
 
 With our **POST** route working let's now configure the **PUT** route. Let's recap the steps we performed for the **POST** route as this requires that we do much of the same:
 
-- import the SKD and connect to DynamoDB
+- import the AWS SDK and connect to DynamoDB
 - Find the right method to use for updating items (hint: putItem)
 - Update the **Integration Response** to format the response data
 - Update the **Integration Request** to include the data model
 
-
-### POST Route
 
 Let's open the **projects-update** Lambda function and import the SDK and connect to DynamoDB. 
 
@@ -274,23 +297,36 @@ Based on how it is being used this is how we should structure it to work with ou
 Now we can configure the method. Since this method does return the new value we can set **reponse.body** to the returned item. 
 
 ```js
-await dynamodb.updateItem(params, function(err, data) {
-    console.log('err', err, 'data', data)
-    if (err) {
-        console.log('err', err);
-    } else {
-        console.log('data', data);
-        response.body = data
-    }
-}).promise()
- 
-console.log("response", response)
+try {
+    const data = await dynamodb.updateItem(params).promise()
+    console.log('data', data)
+    
+    response.body = data
+    
+} catch(err) {
+    response.body = err
+}
+
 return response
 ```
 
+Make sure to tests this via the Lambda funcion. 
+
 <details><summary>Solution Code</summary>
 
+
+
 ```js
+
+const AWS = require('aws-sdk');
+const dynamodb = new AWS.DynamoDB({region: 'us-east-1', apiVersion: '2012-08-10'});
+
+exports.handler = async (event) => {
+    
+ const response = {
+        statusCode: 200,
+    }
+
  const params = {
   ExpressionAttributeNames: {
   "#T": "Title", 
@@ -308,30 +344,28 @@ return response
     UpdateExpression: "SET #T = :t, #I = :i, #D = :d"
  };
     
-    await dynamodb.updateItem(params, function(err, data) {
-        console.log('err', err, 'data', data)
-        if (err) {
-            console.log('err', err);
-        } else {
-            console.log('data', data);
-            response.body = data
-        }
-    }).promise()
+  try {
+    const data = await dynamodb.updateItem(params).promise()
+    console.log('data', data)
     
+    response.body = data
+        
+    } catch(err) {
+        response.body = err
+  }
 
-    console.log('response', response)    
-    return response
+  return response
 };
 ```
 </details>
 
 #### Integration Response 
 
-If we take a look at the AWS Gateway logs for this function we should see the following:
+If we take a look at the **AWS Gateway** logs for this function we should see the following:
 
 <img src="https://i.imgur.com/ckJOpds.png">
 
-This provides us the content we ned to setup the **Integration Response**. 
+This provides us the content we ned to setup the **Integration Response** for the **PUT** route. 
 
 ```js
 {
@@ -344,6 +378,20 @@ This provides us the content we ned to setup the **Integration Response**.
  }
 }
 ```
+
+Let's make sure to give it one final test via the **PUT** route and confirm the data is formatted as expected. 
+
+<img src="https://i.imgur.com/VWPHBgL.png">
+
+#### Redeploy And Test The POST Route Using Postman
+
+Once that has been confirmed re-deploy the API now test it via Postman.  If successful we should see the following:
+
+<img src="https://i.imgur.com/Lp6gOrt.png">
+
+
+
+<img src="https://i.imgur.com/s1qr6yD.png">
 
   ### Resources
 
