@@ -471,8 +471,8 @@ DELETE  | /projects/:id      | Delete specified _project_ | projects-delete | No
 4. Create a Lambda test to verify this works
 4. It should fail as the Lambda role doesn't have permissions to delete
 4. Assign the  **AmazonDynamoDBFullAccess** security policy to the lambda role
-5. Test this using **API Gateway** route
-6. Test using Postman
+5. Test the route this using **API Gateway** route
+6. Test the route using Postman
 
 
   ### Resources
