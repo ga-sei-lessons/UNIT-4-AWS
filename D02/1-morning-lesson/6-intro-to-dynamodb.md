@@ -45,7 +45,7 @@ Every table we've encountered thus far using **Mongo** or **Postgresql** has cre
 
 
 
-A table DynamoDB where an item use only a **Primary Key** composed of a **Partition Key** will resemble both **Mongo** or **Postgresql** and would look like the following: 
+A DynamoDB wtable here an item make use of a **Primary Key** composed of a **Partition Key** only will resemble both **Mongo** or **Postgresql** and would look like the following: 
 
 <img src="https://i.imgur.com/iLbf8X6.png">
 
