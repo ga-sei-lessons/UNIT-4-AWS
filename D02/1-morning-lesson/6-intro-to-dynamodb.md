@@ -36,7 +36,7 @@ Many of the world's fastest growing businesses such as Lyft, Airbnb, and Redfin 
 
 DynamoDB stores data using a single **item** or as an **item collection**. The difference is between using only a **Partition Key** or a combination of **Partition Key** + **Sort Key**. 
 
-### Primary Key = Partition Key
+### An Item
 An **item** in DynamoDB refers to a single entry that is referenced using only a **Primary Key** composed of a **Partition Key**.
 
 <img src="https://i.imgur.com/AxjGVug.png" >
@@ -49,12 +49,12 @@ A DynamoDB wtable here an item make use of a **Primary Key** composed of a **Par
 
 <img src="https://i.imgur.com/iLbf8X6.png">
 
-### Primary Key = Partition Key + Sort Key
+### An Item Collection
 
 
 Since DynamoDB is a NoSQL Database it doesn't have relational tools like the join operations used in **Postgresql**.  Mongo was able to overcome this with creating **references** and then using the **.populate()** method to retrieve items in another collection, however DynamoDB cannot be configured so.
 
-The basic approach to setting up DynamoDB for such a relationship would be to put their item into different tables according to their type and then make multiple requests to fetch both the those items.
+The basic approach to setting up DynamoDB for such a relationship would be to put itemss into different tables according to their type and then make multiple requests to fetch both the those items.
 
 <img src="https://i.imgur.com/cXQNw1k.png">
 
@@ -67,7 +67,7 @@ In the example below, we have a DynamoDB table that contains actors and the movi
 <img src="https://i.imgur.com/sSeYYZB.png">
 
 
-### Free Tier
+## Free Tier
 
 DynamoDB falls into the **Always Free** tier of services so lets take a look at their [free tier](https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc) page search for DynamoDB to confirm this is still the case.  
 
@@ -83,7 +83,7 @@ Although DynamoDB is a free service we still must be conscious of when we exceed
 <img src="https://i.imgur.com/oWyQYHk.png">
 
 
-It should be mentioned that cost is measured across all tables so the more tables you create the greater chance you have of exceeding the free tier. 
+It should be mentioned that cost is measured across all tables for all Regions so the more tables you create the greater chance you have of exceeding the free tier. 
 
 
 <!-- <img src="https://i.imgur.com/6JAOefX.png"> -->
@@ -98,11 +98,13 @@ Let's get started with creating our first DynamoDB table by clicking on the big 
 
 <img src=https://i.imgur.com/lD1OpKf.png >
 
-This takes us to the DynamoDB services page where we can create tables and manage the DynamoDB database. 
+This takes us to the DynamoDB services page where we can create tables and manage the DynamoDB database.  
+
+Click on **Create table**.
 
 <img src="https://i.imgur.com/6kMrAyL.png">
 
-Add a **Table Name** and **Primary Key**.  The **Primary Key**, like all databases, will be unique for each entry in the DB.  
+We will add a **Table Name** and a **Primary Key**.  The **Primary Key**, like all databases, will be unique for each entry in the DB.  
 
 <!-- <img src="https://i.imgur.com/AxjGVug.png" width=500> -->
 
@@ -119,7 +121,7 @@ We should make note of the **Read and Write** capacity units.  This allows us to
 
 
 
-Once the table is created and we should be presented with the following: 
+Once the table is created and we should be presented with the following tabs to configure the table. 
 
 
 <img src="https://i.imgur.com/xMPuhNO.png">
@@ -132,7 +134,7 @@ When we first add a new item we will have to decide the name of the **Primary Ke
 
 <!-- <img src="https://i.imgur.com/AxjGVug.png"> -->
 
-Here is one of the project entries we will use this to create our first entry. 
+Let's add a new item to the table.  This is one of the project entries we will use this to create our first entry and it's data structure is what we configured as the **Model** in the API Gateway. 
 
 ```js
 {
@@ -146,13 +148,21 @@ Clicking on **Create Item** tab we can assign the **ProjectId** a value.  For th
 
 <img src="https://i.imgur.com/KIJ8S3q.png">
 
-Add now it's just a matter of **Appending** additional keys based, choosing a data type and the assigning a value. 
+Now it's just a matter of **Appending** additional keys based, choosing a data type and the assigning a value. 
 
 <img src="https://i.imgur.com/6knMhB8.png" width=300/>
 
 Once complete the item should look like the image below. 
 
 <img src="https://i.imgur.com/iisJCyN.png">
+
+DynamoDB provides us 2 additional ways to view the item. If we click the drop down and change it from **Item** to **Text** we will see the item displayed as an object. 
+
+<img src="https://i.imgur.com/Tqljj1J.png">
+
+Clicking on the **DynamoDB JSON** check box will change the display to the following format.  This format is important and is how we will need to structure our data when we use the AWS SDK to create an item.  This is also the format that DynambDB will return any data received via the SDK. 
+
+<img src="https://i.imgur.com/vMiKlAV.png">
 
 Clicking on **Save** we should see our new item added to the DB
 
