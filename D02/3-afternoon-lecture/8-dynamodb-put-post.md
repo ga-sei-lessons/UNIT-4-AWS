@@ -38,7 +38,7 @@ We can see that the **putItem** method takes in a **params** object and a **call
 
 <img src="https://i.imgur.com/dygqJ9T.png">
 
-Let's first start with creating the params object.  Since DynamoDB doesn't take on the responsibility of managing primary keys we will need to make sure every entry is unique.  
+Let's first start with creating the **params** object.  Since DynamoDB doesn't take on the responsibility for creating unique values for the primary keys we will need to make sure every entry is unique.  
 
 The data structure is very similar to what was returned via **scan** and **getItem** and this will be the same pattern needed to create an item. 
 
@@ -77,19 +77,6 @@ Let's pass the param to **dynamodb.putItem** and set it up for **await** and **.
     response.body = err
 }
 ```
-
-<!-- ```js
-await dynamodb.putItem(params, function(err, data) {
-    console.log('err', err, 'data', data)
-    if (err) {
-        console.log('err', err);
-    } else {
-        console.log('data', data);
-        response.body = data
-    }
-}).promise()
-``` -->
-
 <details><summary>Solution Code</summary>
 
 ```js
@@ -166,7 +153,7 @@ Take a moment to open **IAM** and find the **projects-create-xxx** role. It shou
 
 <img src="https://i.imgur.com/5xN96Fp.png">
 
-Click on **Attach Policies** and do a search for *dynamo**.  The policy we are going to attach is **AmazonDynamoDBFullAccess** as this role will need to create items in the DB. 
+Click on **Attach Policies** and do a search for **dynamo**.  The policy we are going to attach is **AmazonDynamoDBFullAccess** as this is the role we will need to create items in the DB. 
 
 <img src="https://i.imgur.com/Wpdigql.png">
 
@@ -186,6 +173,7 @@ Also confirm that the item has been created in our DynamoDB project table.
 
 Let's also take a moment to test via the **POST** route in the API Gateway.  Pass it the same object as before and confirm that the same data has been returned, with only the projectId being different. 
 
+**UPDATE THIS IMAGE**
 <img src="https://i.imgur.com/H963ZLv.png">
 
 
@@ -208,8 +196,6 @@ If we take a look specifically at **input variables** we can see that **$input.j
 
 Here is how we will use **$input.json()** to format the data. 
 
-
-
 ```js
 {
  "statusCode": $input.json('$.statusCode'),
@@ -222,26 +208,32 @@ Here is how we will use **$input.json()** to format the data.
 }
 ```
 
+Copy and paste the above code into the template body. 
+
+<img src="https://i.imgur.com/s1qr6yD.png">
+
+### Testing via API Gateway and Postman
+
 Let's make sure to give it one final test via the **POST** route and confirm the data is formatted as expected. 
 
 <img src="https://i.imgur.com/VWPHBgL.png">
 
 #### Redeploy And Test The POST Route Using Postman
 
-Once that has been confirmed re-deploy the API now test it via Postman.  If successful we should see the following:
+Once that has been confirmed re-deploy the API and test it via Postman.  If successful we should see the following:
 
 <img src="https://i.imgur.com/Lp6gOrt.png">
 
 
 
-<img src="https://i.imgur.com/s1qr6yD.png">
+
 
 ### PUT Route
 
 With our **POST** route working let's now configure the **PUT** route. Let's recap the steps we performed for the **POST** route as this requires that we do much of the same:
 
-- import the AWS SDK and connect to DynamoDB
-- Find the right method to use for updating items (hint: putItem)
+- import the **AWS SDK** and connect to DynamoDB
+- Find the right method to use for updating an item (hint: updateItem)
 - Update the **Integration Response** to format the response data
 - Update the **Integration Request** to include the data model
 
@@ -270,31 +262,31 @@ Based on how it is being used this is how we should structure it to work with ou
 
 ```js
  const params = {
-  // the keys to be updated
-  ExpressionAttributeNames: {
-  "#T": "Title", 
-  "#I": "Image",
-  "#D": "Description"
-  }, 
-  // the values to assign to the above keys
-  ExpressionAttributeValues: {
-  ":t": { S: event.title }, 
-  ":i": { S: event.image },
-  ":d": { S: event.description}
-  }, 
-  // this is the primary key to target
-  Key: { "ProjectId": { S: event.id } }, 
-  // return all new values
-  ReturnValues: "ALL_NEW", 
-  // table name to target
-  TableName: "projects", 
-  // matches the keys to values
-  UpdateExpression: "SET #T = :t, #I = :i, #D = :d"
+    // the keys to be updated
+    ExpressionAttributeNames: {
+        "#T": "Title", 
+        "#I": "Image",
+        "#D": "Description"
+    }, 
+    // the values to assign to the above keys
+    ExpressionAttributeValues: {
+        ":t": { S: event.title }, 
+        ":i": { S: event.image },
+        ":d": { S: event.description}
+    }, 
+    // this is the primary key to target
+    Key: { "ProjectId": { S: event.id } }, 
+    // return all new values
+    ReturnValues: "ALL_NEW", 
+    // table name to target
+    TableName: "projects", 
+    // matches the keys to values
+    UpdateExpression: "SET #T = :t, #I = :i, #D = :d"
  };
     
 ```
 
-Now we can configure the method. Since this method does return the new value we can set **reponse.body** to the returned item. 
+Now we can configure the method. Since this method will return the new value we can set **reponse.body** to the returned item. 
 
 ```js
 try {
@@ -329,14 +321,14 @@ exports.handler = async (event) => {
 
  const params = {
   ExpressionAttributeNames: {
-  "#T": "Title", 
-  "#I": "Image",
-  "#D": "Description"
+    "#T": "Title", 
+    "#I": "Image",
+    "#D": "Description"
   }, 
   ExpressionAttributeValues: {
-  ":t": { S: event.title }, 
-  ":i": { S: event.image },
-  ":d": { S: event.description}
+    ":t": { S: event.title }, 
+    ":i": { S: event.image },
+    ":d": { S: event.description}
   }, 
     Key: { "ProjectId": { S: event.id } }, 
     ReturnValues: "ALL_NEW", 
@@ -379,9 +371,25 @@ This provides us the content we ned to setup the **Integration Response** for th
 }
 ```
 
+Copy and paste the above code into the template body. 
+
+<img src="https://i.imgur.com/LPan9aG.png">
+
+### Testing via API Gateway and Postman
+
 Let's make sure to give it one final test via the **PUT** route and confirm the data is formatted as expected. 
 
-<img src="https://i.imgur.com/VWPHBgL.png">
+We will need to grab a **projectId** from one of the existing items along with passing it the updated data via the **Request Body**
+
+```js
+  {
+    "title": "Test",
+    "image": "https://i.imgur.com/L9K6hli.png",
+    "description": "Add project description here..."
+}
+```
+
+<img src="https://i.imgur.com/nf8SCRK.png">
 
 #### Redeploy And Test The POST Route Using Postman
 
@@ -391,7 +399,7 @@ Once that has been confirmed re-deploy the API now test it via Postman.  If succ
 
 
 
-<img src="https://i.imgur.com/s1qr6yD.png">
+<!-- <img src="https://i.imgur.com/s1qr6yD.png"> -->
 
   ### Resources
 
