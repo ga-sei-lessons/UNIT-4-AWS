@@ -12,7 +12,8 @@ Creator:  Joe Keohan<br>
 
 This lecture will focus on working with DynamoDB and will cover the following objectives:
 
-- providing an introduction to DynamoDB 
+- provide an introduction to DynamoDB 
+- review primary key options
 - creating tables and adding rows of data
 
 
