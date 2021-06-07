@@ -41,7 +41,7 @@ An **item** in DynamoDB refers to a single entry that is referenced using only a
 
 <img src="https://i.imgur.com/AxjGVug.png" >
 
-Every table we've encountered thus far using **Mongo** or **Postgresql** has created items using the same pattern.  **Mongo** organized data into **Collections** and  **Postgresql** as tables and both use an **id** field as the primary key. 
+Every table we've encountered thus far using **Mongo** or **Postgresql** has created items using the same pattern.  **Mongo** organized data into **Collections** and  **Postgresql** as tables with both using some form of an **id** field as the primary key. 
 
 
 
