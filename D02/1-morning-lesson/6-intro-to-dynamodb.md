@@ -170,7 +170,7 @@ Clicking on **Save** we should see our new item added to the DB
 
 ## Exercise - Manually Create The Following Items - 5min
 
-Perform the same steps create the items below and be sure to g
+Perform the same steps create the items below and follow the same pattern as before. 
 
 ```js
 {
