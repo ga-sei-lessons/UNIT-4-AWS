@@ -472,6 +472,8 @@ DELETE  | /projects/:id      | Delete specified _project_ | projects-delete | No
 2. Review the [AWS Docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html) and find the method used to delete a single item from the DynamoDB database. 
 3. Update the Lambda function to include all the code needed to delete an item
 4. Create a Lambda test to verify this works
+4. It should fail as the lambda role doesn't have permissions to delete
+4. Assign the  **AmazonDynamoDBFullAccess** security policy to the lambda function
 5. Test this using **AWS Gateway Delete** route
 6. Test using Postman
 
