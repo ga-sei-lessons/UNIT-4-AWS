@@ -1,3 +1,44 @@
+
+```js
+module.exports = [
+    {
+        "title": "Instagram Quotes",
+        "image": "https://res.cloudinary.com/jkeohan/image/upload/v1582134376/Screen_Shot_2020-01-30_at_8.57.12_AM_cnrvug.png",
+        "description": "Add project description here..."
+    },
+    {
+        "title": "Startup Matchmaker",
+        "image": "https://res.cloudinary.com/jkeohan/image/upload/v1533402294/startup-matchmaker.png",
+        "description": "Add project description here..."
+    },
+    {
+        "title": "CSS Grid Image Gallery",
+        "image": "https://i.imgur.com/L9K6hli.png",
+        "description": "Add project description here..."
+    },
+    {
+        "title": "GA Press Release",
+        "image": "https://i.imgur.com/V2BP6Nf.png",
+        "description": "Add project description here..."
+    },
+    {
+        "title": "Fashion Blog",
+        "image": "https://i.imgur.com/orjmTFP.jpg",
+        "description": "Add project description here..."
+    },
+    {
+        "title": "FoodSense",
+        "image": "https://res.cloudinary.com/jkeohan/image/upload/v1565124419/food-sense-logo.png",
+        "description": "Food Sense...love it..."
+    },
+    {
+        "title": "StreetBall Mecca",
+        "image": "https://res.cloudinary.com/jkeohan/image/upload/v1553206861/streetball-mecca.png",
+        "description": "This project was built in D3 and recreates a tabelau dashboard"
+    }
+]
+```
+
 ```js
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB({region: 'us-east-1', apiVersion: '2012-08-10'});
