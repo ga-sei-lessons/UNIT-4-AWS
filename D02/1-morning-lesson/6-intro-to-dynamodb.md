@@ -20,7 +20,7 @@ This lecture will focus on working with DynamoDB and will cover the following ob
 
 ## AWS DynamoDB
 
-Amazon DynamoDB is a NoSQL Database that uses key-values to create and manage entries.  It offers the following benefits:
+Amazon DynamoDB is a NoSQL Database that uses key-values to create and manage entries and offers the following benefits:
 
 - delivers single-digit millisecond performance at any scale
 - it's a fully managed, multi-region, multi-active, durable database with backup and restore, and in-memory caching for internet-scale applications. 
