@@ -474,6 +474,39 @@ DELETE  | /projects/:id      | Delete specified _project_ | projects-delete | No
 5. Test the route this using **API Gateway** route
 6. Test the route using Postman
 
+<details><summary>Solution Code</summary>
+
+```js
+const AWS = require('aws-sdk');
+const dynamodb = new AWS.DynamoDB({region: 'us-west-1', apiVersion: '2012-08-10'});
+
+
+exports.handler = async (event) => {
+    // TODO implement
+    const response = {
+        statusCode: 200,
+        body: event
+    };
+    
+    const params = { 
+        TableName: 'projects',
+        Key: { "ProjectId": {S: event.id} }
+    }
+    
+    try {
+        await dynamodb.deleteItem(params).promise()
+        response.body = "item deleted"
+    }catch(err){
+        response.body = err
+    }
+    return response;
+};
+```
+
+<img src="https://i.imgur.com/GaEt7K7.png">
+
+</details>
+
 
   ### Resources
 
