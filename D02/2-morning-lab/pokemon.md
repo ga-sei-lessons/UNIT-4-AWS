@@ -47,9 +47,8 @@ Update the Lambda functions to import the AWS SDK and instantiate a new instance
 - Instantiate a new instance of DynamoDB.   
 - Retrieve all the items in the DB
 - Format the data as to return only the required key:values 
-- Test that Lambda function 
-- Test that the route is also able to retrieve the data
-- Deploy the API and add an appropriate deployment message
+- Test that Lambda function to confirm that it works
+- Test that the route in API Gateway to confirm that it works
 - Test the route works via Postman
 
 **GET /pokemon/:id route**
@@ -57,17 +56,14 @@ Update the Lambda functions to import the AWS SDK and instantiate a new instance
 - Instantiate a new instance of DynamoDB.   
 - Retrieve a single item based on the ID from the DB
 - Format the data as to return only the required key:values 
-- Test that Lambda function 
-- Test that the route is also able to retrieve the data
-- Deploy the API and add an appropriate deployment message
+- Test that Lambda function to confirm that it works
+- Test that the route in API Gateway to confirm that it works
 - Test the route works via Postman
 
 **DELETE /pokemon/:id route**
 - Update the Lambda function to import the AWS SDK 
 - Instantiate a new instance of DynamoDB.   
 - Delete a single item based on the ID from the DB
-- Format the data as to return only the required key:values 
-- Test that Lambda function 
-- Test that the route is also able to retrieve the data
-- Deploy the API and add an appropriate deployment message
+- Test that Lambda function to confirm that it works
+- Test that the route in API Gateway to confirm that it works
 - Test the route works via Postman
