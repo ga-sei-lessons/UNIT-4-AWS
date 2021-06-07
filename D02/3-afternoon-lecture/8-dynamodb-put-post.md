@@ -7,7 +7,7 @@
 This lecture will focus on posting new items and update existing items in DynamoDB via the **POST/PUT** routes.  We will focus on the following:
 
 - updating the **project-create** Lambda function to create new items in DynamoDB
-- updating the **project-show** Lambda function to update existing items in DynamoDB
+- updating the **project-update** Lambda function to update existing items in DynamoDB
 
 ### POST Route
 
