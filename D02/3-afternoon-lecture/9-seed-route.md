@@ -50,6 +50,7 @@ exports.handler = async (event) => {
         statusCode: 200,
     };
     
+    // format the projects data to be created
     let seedData = projects.map( project => {
         return {
             PutRequest: {
@@ -63,16 +64,17 @@ exports.handler = async (event) => {
         }
     })
     
+    // params includes the project data
     let params = { 
         RequestItems: { "projects": seedData }
     };
-    
+    // create the items in bulk using .batchWriteItems()
     try{
       await dynamodb.batchWriteItem(params).promise()
     } catch(err) {
       console.log('err', err)
     }
-    
+    // retrieve all the created items usin .scan()
     try {
       const data = await dynamodb.scan({"TableName": "projects"}).promise()  
       const items = data.Items.map( (data,index) => {
@@ -90,5 +92,6 @@ exports.handler = async (event) => {
  
     return response;
 };
+
 
 ```

@@ -21,11 +21,11 @@ const dynamodb = new AWS.DynamoDB({region: 'us-east-1', apiVersion: '2012-08-10'
 
 #### The putItem Method
 
-The method we will use to create new items is **putItem**.
+If we examine the routing table we can see that the method used to create new items is **putItem**.
 
 HTTP | Resource  | CRUD Operation | Lambda | DynamoDB | Has Data
 -----------|------------------|------------------|:---:|:---:|:---:
-PUT     | /projects/:id      | Update specified _project_  | projects-update | updateItem | Yes
+POST    | /projects          | Create a new _project_ | projects-create | putItem | Yes
 
 
  If we do a quick search for **putItem** in the [AWS Docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html) we should see the following:
@@ -248,7 +248,14 @@ const dynamodb = new AWS.DynamoDB({region: 'us-east-1', apiVersion: '2012-08-10'
 
 #### The updateItem Method
 
-The method we will use to update existing items is **updateItem**. If we do a quick search for **updateItem** in the [AWS Docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html) we should see the following:
+If we examine the routing table we can see that the method used to update an item is **updateItem**.
+
+HTTP | Resource  | CRUD Operation | Lambda | DynamoDB | Has Data
+-----------|------------------|------------------|:---:|:---:|:---:
+PUT     | /projects/:id      | Update specified _project_  | projects-update | updateItem | Yes
+
+
+If we do a quick search for **updateItem** in the [AWS Docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html) we should see the following:
 
 <img src="https://i.imgur.com/LGFxdSr.png">
 
@@ -258,7 +265,7 @@ We can see that the **updateItem** method takes in a **params** object and a **c
 
 <img src="https://i.imgur.com/JIc8OYa.png">
 
-Based on how it is being used this is how we should structure it to work with our requirements. 
+Based on how it is being used in the example we would need to structure our code as follows: 
 
 ```js
  const params = {
@@ -357,7 +364,13 @@ If we take a look at the **AWS Gateway** logs for this function we should see th
 
 <img src="https://i.imgur.com/ckJOpds.png">
 
-This provides us the content we ned to setup the **Integration Response** for the **PUT** route. 
+In order to off load as much processing as possible from the Lambda function we can format the data in **Integration Response** for the **PUT** route. 
+
+Let's create a new **Mapping Template** in **Integration Response** for the **PUT** route. 
+
+<img src="https://i.imgur.com/xtw4tWf.png">
+
+Here is how we will use **$input.json()** to format the data as was done for the **POST** route. 
 
 ```js
 {

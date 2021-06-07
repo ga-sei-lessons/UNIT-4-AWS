@@ -466,7 +466,7 @@ HTTP  | Resource  | CRUD Operation | Lambda | Has Data
 DELETE  | /projects/:id      | Delete specified _project_ | projects-delete | No
 
 1. Take a moment to review the routing table and confirm the name of the Lambda function to edit
-2. Review the [AWS Docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html) and find the method used to delete a single item from the DynamoDB database. 
+2. Review the [AWS Docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html) and find the method used to delete a single item from the DynamoDB database. (hint: deleteItem )
 3. Update the Lambda function to include all the code needed to delete an item
 4. Create a Lambda test to verify this works
 4. It should fail as the Lambda role doesn't have permissions to delete
