@@ -308,8 +308,25 @@ try {
 
 return response
 ```
+### Testing
 
-Make sure to tests this via the Lambda funcion. 
+Let's try testing our code in Lambda.  Either update a previous test or create a new one.  Add the following code to the test:
+
+```js
+{
+  "id": "project_1",
+  "title": "New Project",
+  "image": "https://i.imgur.com/L9K6hli.png",
+  "description": "Add project description here..."
+}
+```
+
+If the test is successful we should receive the following.  Keep in mind that this time DynamoDB returns an **Attributes** key instead of **Item**
+
+<img src="https://i.imgur.com/T29HeRP.png">
+
+
+
 
 <details><summary>Solution Code</summary>
 
@@ -358,19 +375,19 @@ exports.handler = async (event) => {
 ```
 </details>
 
-#### Integration Response 
+### API Gateway Integration Response 
 
-If we take a look at the **AWS Gateway** logs for this function we should see the following:
+<!-- If we take a look at the **AWS Gateway** logs for this function we should see the following:
 
-<img src="https://i.imgur.com/ckJOpds.png">
+<img src="https://i.imgur.com/ckJOpds.png"> -->
 
-In order to off load as much processing as possible from the Lambda function we can format the data in **Integration Response** for the **PUT** route. 
+In order to off load as much processing as possible from the Lambda function we can pass the responsibility to format the data to the API Gateway withing the **Integration Response** of the **PUT** route. 
 
 Let's create a new **Mapping Template** in **Integration Response** for the **PUT** route. 
 
 <img src="https://i.imgur.com/xtw4tWf.png">
 
-Here is how we will use **$input.json()** to format the data as was done for the **POST** route. 
+As in the **POST** route we will make use of **$input.json()** to map the values passed to the API Gateway from Lambda.  There is one difference in that here we replace **Item** with **Attributes**. 
 
 ```js
 {
@@ -390,9 +407,7 @@ Copy and paste the above code into the template body.
 
 ### Testing via API Gateway and Postman
 
-Let's make sure to give it one final test via the **PUT** route and confirm the data is formatted as expected. 
-
-We will need to grab a **projectId** from one of the existing items along with passing it the updated data via the **Request Body**
+We will need to grab a **projectId** from one of the existing items along with passing it the updated data via the **Request Body**.  If successful we should she the object returned in it's updated form. 
 
 ```js
   {
@@ -406,7 +421,7 @@ We will need to grab a **projectId** from one of the existing items along with p
 
 #### Redeploy And Test The POST Route Using Postman
 
-Once that has been confirmed re-deploy the API now test it via Postman.  If successful we should see the following:
+With the API Gateway working let's re-deploy the API test it via Postman.  If successful we should see the following:
 
 <img src="https://i.imgur.com/Lp6gOrt.png">
 
